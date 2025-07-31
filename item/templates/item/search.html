@@ -9,6 +9,25 @@
             <input type="text" name="query" class="w-full py-4 px-6 border border-gray-300 rounded-xl" value="{{query}}" placeholder="Find a bike, a chari or car...">
             <button class="mt-2 py-4 px-8 bg-teal-500 text-white text-lg rounded-xl">Search</button>
         </form>
+
+        <hr class="my-6">
+
+        <p class="font-semibold text-lg">Categories</p>
+        <ul>
+            {% for category in categories %}
+                <li class="py-2 px-2 rounded-xl {% if category.id == category_id %} font-semibold bg-gray-200 {% endif %}">
+                    <a href="{% url 'item:search' %}?query={{query}}&category_id={{category.id}}">{{category.name}}</a>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <hr class="my-6">
+
+        <p class="font-semibold text-lg">Clear filters</p>
+        <ul>
+            <li><a href="{% url 'item:search' %}" class="mt-2 py-4 px-8 inline-block bg-yellow-500 text-white text-lg rounded-xl ">Clear</a></li>
+        </ul>
+
     </div>
 
     <div class="col-span-3">

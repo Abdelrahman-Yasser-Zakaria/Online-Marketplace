@@ -17,9 +17,9 @@
         <a
           href="{% url 'item:new' %}"
           class="text-lg font-semibold hover:text-gray-500"
-          >New item</a
+          >List new item</a
         >
-        <a href="{% url 'item:search' %}" class="text-lg font-semibold hover:text-gray-500">Browse</a>
+        <a href="{% url 'item:search' %}" class="text-lg font-semibold hover:text-gray-500">Search</a>
 
         {% if request.user.is_authenticated %}
         <a
