@@ -1,0 +1,48 @@
+{% extends "core/base.html" %}
+
+{% block title %}Convesation{%endblock %} 
+
+{% block content %}
+
+{% for member in conversation.members.all %}
+    {% if member != request.user %}
+        <h1 class="mb-6 text-3xl">{{member.username}}</h1>
+    {% endif %}
+{% endfor %}
+<div class="space-y-6">
+    {% for message in conversation.messages.all %}
+        <div class="p-6 flex flex-col {% if message.created_by == request.user %}bg-blue-100{% else %}bg-gray-100{% endif %} rounded-xl">
+            <div>
+                <p class="mb-2">{{message.content}}</p>
+            </div>
+            <div class="flex justify-end">
+                <p class="text-sm text-gray-500">{{message.created_at|time:"g:i A"}}</p>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<form method="post" action="." class="mt-6">
+  {% csrf_token %}
+  <div class="space-y-4">
+    {{ form.as_p }}
+  </div>
+
+  {% if form.errors or form.non_field_errors %}
+    <div class="mb-3 p-6 bg-red-100 rounded-xl">
+      {% for field in form %} 
+        {{field.errors}} 
+      {% endfor %} 
+      
+      {{form.non_field_errors }}
+    </div>
+  {% endif %}
+
+  <button
+    class="mt-6 py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white"
+  >
+    Send
+  </button>
+
+</form>
+{% endblock %}

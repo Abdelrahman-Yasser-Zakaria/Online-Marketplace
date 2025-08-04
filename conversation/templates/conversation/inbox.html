@@ -1,0 +1,39 @@
+{% extends "core/base.html" %}
+
+{% block title %} New Convesation {%endblock %} 
+
+{% block content %}
+<h1 class="mb-6 text-3xl">Inbox</h1>
+
+<div class="space-y-6">
+    {% for conversation in conversations %}
+        <a href="{% url 'conversation:detail' conversation.id %}">
+            <div class="p-6 flex bg-gray-100 rounded-xl">
+                <div class="pr-6">  <!-- item image -->
+                    <img src="{{conversation.item.main_image.url}}" alt="{{conversation.item.name}}" class="w-20 rounded-full">
+                </div>
+
+                <div>   <!-- important conversation details-->
+                    {% for member in conversation.members.all %}
+                        {% if member != request.user %}
+                            <p class="mb-4">{{member.username}} . {{conversation.item.name}}</p>
+                        {% endif %}
+                    {% endfor %}
+                    <p>
+                        <span>
+                            {% if conversation.messages.last.created_by == request.user %}
+                                You:
+                            {% else %}
+                                conversation.messages.last.created_by.username:
+                            {% endif %}
+                        </span>
+                        <span>{{conversation.messages.last.content}}</span><br>
+                        <span class="text-sm text-gray-500">{{conversation.modified_at|timesince}}</span>
+                    </p>
+                </div>
+            </div>
+        </a>
+    {% endfor%}
+</div>
+
+{% endblock %}

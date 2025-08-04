@@ -74,6 +74,7 @@
         </p>
         <p><span class="font-bold text-lg">Condition: </span><span class="text-lg">{{item.condition}}</span></p>
         <p><span class="font-bold text-lg">Location: </span><span class="text-lg">{{item.location}}</span></p>
+        <p><span class="text-lg">Listed on {{item.created_at|timesince}} ago</span></p>
       </div>
 
       {% if item.description %}
@@ -108,7 +109,7 @@
             {% endif %}
           </p>
           <p class="text-sm text-gray-500">
-            Member since {{item.created_by.date_joined}}
+            Member since {{item.created_by.date_joined|date:"M Y"}}
           </p>
         </div>
       </div>
@@ -117,23 +118,24 @@
       <div class="space-y-3">
         {% if request.user == item.created_by %}
           <a
-            href="{% url 'item:edit' item.id%}"
+            href="{% url 'item:edit' item.id %}"
             class="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center"
           >
             Edit Item
           </a>
           <a
-            href="{% url 'item:delete' item.id%}"
+            href="{% url 'item:delete' item.id %}"
             class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center"
           >
             Delete Item
           </a>
         {% else %}
-          <button
+          <a
+            href="{% url 'conversation:new' item.id %}"
             class="w-full bg-red-100 hover:bg-red-200 text-red-600 font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center"
           >
             Chat
-          </button>
+          </a>
         {% endif %}
       </div>
     </div>
