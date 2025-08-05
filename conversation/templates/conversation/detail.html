@@ -6,17 +6,70 @@
 
 {% for member in conversation.members.all %}
     {% if member != request.user %}
-        <h1 class="mb-6 text-3xl">{{member.username}}</h1>
+      <!-- chat header section -->
+      <div class="flex items-center justify-between border border-gray-200 p-2">
+        <!-- username side -->
+        <div class="flex items-center space-x-3">
+          <div
+            class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center"
+          >
+            <span class="text-red-600 font-bold text-lg">
+              {{member.username|first|upper}}
+            </span>
+          </div>
+          <div>
+            <p class="font-semibold text-lg text-gray-900">
+              {{member.username}} 
+            </p>
+          </div>
+        </div>
+
+        <!-- action buttons -->
+        <a href="{% url 'conversation:inbox' %}" 
+           class="w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors"
+           title="Back to Inbox">
+          <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </a>
+      </div>
     {% endif %}
 {% endfor %}
-<div class="space-y-6">
+
+<div class="flex items-center justify-between mb-6 border border-gray-200 p-2">
+  <!-- Product info section -->
+  <div class="flex items-center space-x-3">
+    <!-- Product image with better styling -->
+    <div class="w-12 h-12 rounded-lg overflow-hidden bg-white shadow-sm">
+      <img src="{{conversation.item.main_image.url}}" 
+          alt="{{conversation.item.name}}" 
+          class="w-full h-full object-cover">
+    </div>
+    
+    <!-- Product details -->
+    <div>
+      <p class="text-lg font-semibold text-gray-900">{{conversation.item.name}}</p>
+      <p class="text-medium font-medium text-gray-900">EGP {{conversation.item.price}}</p>
+    </div>
+  </div>
+
+  <!-- View Ad button -->
+  <a href="{% url 'item:detail' conversation.item.id %}" 
+    class="px-4 py-2 border border-red-500 text-red-500 rounded-lg hover:bg-red-50 transition-colors">
+    View item
+  </a>
+</div>
+
+<div class="space-y-2">
     {% for message in conversation.messages.all %}
-        <div class="p-6 flex flex-col {% if message.created_by == request.user %}bg-blue-100{% else %}bg-gray-100{% endif %} rounded-xl">
-            <div>
-                <p class="mb-2">{{message.content}}</p>
-            </div>
-            <div class="flex justify-end">
-                <p class="text-sm text-gray-500">{{message.created_at|time:"g:i A"}}</p>
+        <div class="flex {% if message.created_by == request.user %}justify-end{% else %}justify-start{% endif %}">
+            <div class="p-4 max-w-xs md:max-w-md lg:max-w-lg {% if message.created_by == request.user %}bg-blue-100{% else %}bg-gray-100{% endif %} rounded-xl">
+                <div>
+                    <p class="mb-2">{{message.content}}</p>
+                </div>
+                <div class="flex justify-end">
+                    <p class="text-sm text-gray-500">{{message.created_at|time:"g:i A"}}</p>
+                </div>
             </div>
         </div>
     {% endfor %}
@@ -24,8 +77,8 @@
 
 <form method="post" action="." class="mt-6">
   {% csrf_token %}
-  <div class="space-y-4">
-    {{ form.as_p }}
+  <div>
+    {{ form.content }}
   </div>
 
   {% if form.errors or form.non_field_errors %}
@@ -39,7 +92,7 @@
   {% endif %}
 
   <button
-    class="mt-6 py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white"
+    class="mt-4 py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white"
   >
     Send
   </button>

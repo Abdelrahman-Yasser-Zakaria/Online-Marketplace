@@ -1,14 +1,40 @@
 {% extends "core/base.html" %}
 
-{% block title %} New Convesation {%endblock %} 
+{% block title %} New Conversation {%endblock %} 
 
 {% block content %}
-<h1 class="mb-6 text-3xl">New Conversation</h1>
+<!-- chat header section -->
+<div class="flex items-center justify-between border border-gray-200 p-2">
+  <!-- username side -->
+  <div class="flex items-center space-x-3">
+    <div
+      class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center"
+    >
+      <span class="text-red-600 font-bold text-lg">
+        {{item.created_by.username|first|upper}}
+      </span>
+    </div>
+    <div>
+      <p class="font-semibold text-lg text-gray-900">
+        {{item.created_by.username}} 
+      </p>
+    </div>
+  </div>
 
-<form method="post" action=".">
+  <!-- action buttons -->
+  <a href="{% url 'item:detail' item.id%}" 
+      class="w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors"
+      title="Back to item details">
+    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+    </svg>
+  </a>
+</div>
+
+<form method="post" action="." class="mt-6">
   {% csrf_token %}
-  <div class="space-y-4">
-    {{ form.as_p }}
+  <div>
+    {{ form.content }}
   </div>
 
   {% if form.errors or form.non_field_errors %}
@@ -22,7 +48,7 @@
   {% endif %}
 
   <button
-    class="mt-6 py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white"
+    class="mt-4 py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white"
   >
     Send
   </button>
